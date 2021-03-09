@@ -16,8 +16,14 @@ deps/includes/base64:
 	cp deps/base64/base64.hpp $@
 	rm -rf deps/base64
 
+deps/includes/ares: 
+	git clone https://github.com/padget/ares deps/ares
+	mkdir -p $@
+	cp deps/ares/ares.hpp $@
+	rm -rf deps/ares
+
 .PHONY: prepare
-prepare: deps/includes/clon deps/includes/base64
+prepare: deps/includes/clon deps/includes/base64 deps/includes/ares
 
 bin:
 	mkdir bin
@@ -28,8 +34,14 @@ bin/clon: src/cpp/clon.cpp bin prepare
 bin/base64: src/cpp/base64.cpp bin prepare
 	${CC} -o $@ $< ${INCLUDES} ${FLAGS} 
 
-.PHONY: build
-build: bin/clon bin/base64
+bin/ares: src/cpp/ares.cpp bin prepare
+	${CC} -o $@ $< ${INCLUDES} ${FLAGS} 
+
+.PHONY: build build-scripts
+build-scripts: 
+	cp -r src/scripts/* bin/
+
+build: bin/clon bin/base64 bin/ares build-scripts
 
 .PHONY: clean
 clean: 

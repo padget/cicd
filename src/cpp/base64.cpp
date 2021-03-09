@@ -29,8 +29,6 @@ try
                                          std::istreambuf_iterator<char>())
                            : std::string(args[2]);
 
-    std::cout << "'" << data << "'" << std::endl;
-
     std::string_view v(data.begin(), (data.ends_with('\n') ? data.end() - 1 : data.end()));
 
     if (action == "encode")
